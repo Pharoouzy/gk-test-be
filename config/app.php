@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'google_map_api_key' => env('GOOGLE_MAP_API_KEY', 'AIzaSyDy_XXXXXXX'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
