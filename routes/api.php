@@ -16,5 +16,9 @@ use App\Http\Controllers\V1\LocationController;
 */
 
 Route::group(['namespace' => 'V1', 'prefix' => 'v1'], function () {
-    Route::get('search', [LocationController::class, 'search']);
+    Route::group(['namespace' => 'V1', 'prefix' => 'locations'], function () {
+        Route::get('search', [LocationController::class, 'searchLocation']);
+        Route::get('', [LocationController::class, 'index']);
+        Route::post('', [LocationController::class, 'store']);
+    });
 });
