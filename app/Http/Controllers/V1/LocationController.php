@@ -20,7 +20,7 @@ class LocationController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function index() {
-        $locations = Location::orderBy('id')->get();
+        $locations = Location::orderBy('address', 'asc')->get();
         return $this->response('Locations successfully retrieved', $locations);
     }
 
@@ -29,6 +29,7 @@ class LocationController extends Controller {
      * @return \Illuminate\Http\JsonResponse
      */
     public function search(Request $request) {
+
         $locations = Location::where('title', 'LIKE', '%{$request->keywords}%')->get();
 
         if(!$locations){
@@ -38,21 +39,26 @@ class LocationController extends Controller {
         return $this->response('Success', $locations);
     }
 
+    public function store(Request $request) {
+        try{
+            $location = Location::updateOrCreate(['address' => $request->address], $request->only(['address', 'main', 'sec', 'lat', 'lng']));
+            return $this->response('Location successfully saved', $location);
+        } catch(\Exception $exception){
+            return $this->response('An error occurred', $exception->getMessage(), 422);
+        }
+    }
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request) {
+    public function storeLocation(Request $request) {
         try{
             $data = $this->getGeometry($request->address);
             $location = Location::updateOrCreate([
-                    'place_id' => $data->place_id,
-                ],
-                [
                     'address' => $data->address,
-                    'lat' => $data->lat,
-                    'lng' => $data->lng,
-                ]
+                ],
+                $request->only(['address', 'main', 'sec', 'lat', 'lng'])
             );
             return $this->response('Location successfully saved', $location);
         } catch(\Exception $exception){
