@@ -1,4 +1,4 @@
-### AirtimeFlip API
+### API Setup
 
 #### Introduction
 This API can be used to save and fetch locations
